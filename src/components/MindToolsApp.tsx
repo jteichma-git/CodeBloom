@@ -228,6 +228,21 @@ export function MindToolsApp() {
           <p className="text-gray-600 text-sm">Bite-sized cognitive strategies for wellbeing</p>
         </div>
 
+        {userLogs.length > 0 && !selectedStrategy && (
+          <div className="bg-base-100 rounded-lg p-3 mb-4 flex justify-between items-center text-sm">
+            <span className="text-gray-600">
+              {userLogs.length} strategies tried • {(userLogs.reduce((sum, log) => sum + log.rating, 0) / userLogs.length).toFixed(1)}★ avg
+            </span>
+            <button 
+              className="btn btn-ghost btn-xs"
+              onClick={() => setCurrentView("log")}
+            >
+              <BookOpen className="w-3 h-3 mr-1" />
+              View Log
+            </button>
+          </div>
+        )}
+
         <div className="flex gap-2 mb-4">
           <button
             className={`btn flex-1 ${filterType === "category" ? "btn-primary" : "btn-outline"}`}
@@ -279,8 +294,11 @@ export function MindToolsApp() {
                 <div className="card-body p-4">
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="card-title text-sm">{strategy.title}</h3>
-                    <div className={`badge ${getResearchBadgeColor(strategy.researchSupport)}`}>
-                      {strategy.researchSupport}
+                    <div className="flex items-center gap-1">
+                      <div className={`badge ${getResearchBadgeColor(strategy.researchSupport)}`}>
+                        {strategy.researchSupport}
+                      </div>
+                      <span className="text-xs text-gray-500">Credibility</span>
                     </div>
                   </div>
                   <p className="text-gray-600 text-xs mb-2">{strategy.description}</p>
@@ -315,8 +333,11 @@ export function MindToolsApp() {
                     <>
                       <div className="flex justify-between items-start mb-4">
                         <h2 className="card-title text-lg">{selectedStrategy.title}</h2>
-                        <div className={`badge ${getResearchBadgeColor(selectedStrategy.researchSupport)}`}>
-                          {selectedStrategy.researchSupport}
+                        <div className="flex items-center gap-1">
+                          <div className={`badge ${getResearchBadgeColor(selectedStrategy.researchSupport)}`}>
+                            {selectedStrategy.researchSupport}
+                          </div>
+                          <span className="text-xs text-gray-500">Credibility</span>
                         </div>
                       </div>
                       <p className="text-gray-600 mb-3 flex-1">{selectedStrategy.description}</p>
@@ -400,26 +421,6 @@ export function MindToolsApp() {
           </div>
         )}
 
-        {userLogs.length > 0 && !selectedStrategy && (
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <div className="flex justify-between items-center mb-2">
-                <h3 className="card-title">Your Progress</h3>
-                <button 
-                  className="btn btn-outline btn-sm"
-                  onClick={() => setCurrentView("log")}
-                >
-                  <BookOpen className="w-4 h-4 mr-1" />
-                  View Log
-                </button>
-              </div>
-              <p className="text-sm text-gray-600">
-                You've tried {userLogs.length} strategies with an average rating of{" "}
-                {(userLogs.reduce((sum, log) => sum + log.rating, 0) / userLogs.length).toFixed(1)} stars
-              </p>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
