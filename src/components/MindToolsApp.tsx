@@ -7,7 +7,6 @@ import {
   Heart, 
   Filter, 
   Star, 
-  RotateCcw, 
   ArrowLeft, 
   BookOpen, 
   Calendar,
@@ -31,18 +30,6 @@ interface Strategy {
   _creationTime: number;
 }
 
-interface UserLog {
-  _id: Id<"userLogs">;
-  userId: Id<"users">;
-  strategyId?: Id<"strategies">;
-  title?: string;
-  rating?: number;
-  note?: string;
-  selectedFilter?: string;
-  filterType?: FilterType;
-  strategyTitle: string;
-  _creationTime: number;
-}
 
 const strategiesQueryOptions = convexQuery(api.strategies.list, {});
 const userLogsQueryOptions = convexQuery(api.userLogs.getUserLogs, {});

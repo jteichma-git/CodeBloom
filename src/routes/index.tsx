@@ -1,6 +1,5 @@
 import { SignInButton } from "@clerk/clerk-react";
 import { convexQuery } from "@convex-dev/react-query";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated } from "convex/react";
 import { Brain } from "lucide-react";

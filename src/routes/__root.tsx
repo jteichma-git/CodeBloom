@@ -9,7 +9,6 @@ import {
 import type { QueryClient } from "@tanstack/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
 import {
-  Link,
   Outlet,
   createRootRouteWithContext,
 } from "@tanstack/react-router";
@@ -21,8 +20,7 @@ import {
   useMutation,
 } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
-import { Menu } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { api } from "../../convex/_generated/api";
 
 export const Route = createRootRouteWithContext<{
@@ -34,11 +32,6 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
   const { queryClient, convexClient: convex } = Route.useRouteContext();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
 
   return (
     <ClerkProvider
