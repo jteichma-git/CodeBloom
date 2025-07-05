@@ -43,10 +43,12 @@ interface UserLog {
 
 const strategiesQueryOptions = convexQuery(api.strategies.list, {});
 const userLogsQueryOptions = convexQuery(api.userLogs.getUserLogs, {});
+const globalRatingsQueryOptions = convexQuery(api.strategies.getGlobalRatings, {});
 
 export function MindToolsApp() {
   const { data: strategies } = useSuspenseQuery(strategiesQueryOptions);
   const { data: userLogs } = useSuspenseQuery(userLogsQueryOptions);
+  const { data: globalRatings } = useSuspenseQuery(globalRatingsQueryOptions);
   const createLog = useMutation(api.userLogs.createLog);
   
   const [selectedStrategy, setSelectedStrategy] = useState<Strategy | null>(null);
@@ -59,13 +61,9 @@ export function MindToolsApp() {
   const categories = ["Focus", "Calm", "Energy", "Mood", "Sleep", "Stress"];
   const emotions = ["Tired", "Anxious", "Frazzled", "Sad", "Overwhelmed", "Restless"];
 
-  // Calculate global average rating for each strategy
+  // Get global average rating for each strategy
   const getStrategyAverageRating = (strategyId: string) => {
-    const strategyLogs = userLogs.filter(log => log.strategyId === strategyId);
-    if (strategyLogs.length === 0) return null;
-    
-    const totalRating = strategyLogs.reduce((sum, log) => sum + log.rating, 0);
-    return totalRating / strategyLogs.length;
+    return globalRatings[strategyId] || null;
   };
 
   const filteredStrategies = selectedFilter

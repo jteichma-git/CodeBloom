@@ -31,3 +31,31 @@ export const create = mutation({
     });
   },
 });
+
+export const getGlobalRatings = query({
+  args: {},
+  handler: async (ctx) => {
+    // Get all user logs (no user filtering for global stats)
+    const allLogs = await ctx.db.query("userLogs").collect();
+    
+    // Group by strategy and calculate averages
+    const ratingsByStrategy: Record<string, { total: number; count: number }> = {};
+    
+    for (const log of allLogs) {
+      const strategyId = log.strategyId;
+      if (!ratingsByStrategy[strategyId]) {
+        ratingsByStrategy[strategyId] = { total: 0, count: 0 };
+      }
+      ratingsByStrategy[strategyId].total += log.rating;
+      ratingsByStrategy[strategyId].count += 1;
+    }
+    
+    // Calculate averages
+    const globalRatings: Record<string, number> = {};
+    for (const [strategyId, stats] of Object.entries(ratingsByStrategy)) {
+      globalRatings[strategyId] = stats.total / stats.count;
+    }
+    
+    return globalRatings;
+  },
+});
