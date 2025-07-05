@@ -33,10 +33,10 @@ export const getUserLogs = query({
             strategyTitle: strategy?.title || "Unknown Strategy",
           };
         } else {
-          // This is a "Random Musing" entry
+          // This is a "Reflection" entry
           return {
             ...log,
-            strategyTitle: log.title || "Random Musing",
+            strategyTitle: log.title || "Reflection",
           };
         }
       })
@@ -49,7 +49,7 @@ export const getUserLogs = query({
 export const createLog = mutation({
   args: {
     strategyId: v.optional(v.id("strategies")),
-    title: v.optional(v.string()), // For "Random Musing" entries
+    title: v.optional(v.string()), // For "Reflection" entries
     rating: v.optional(v.number()),
     note: v.optional(v.string()),
     selectedFilter: v.optional(v.string()),

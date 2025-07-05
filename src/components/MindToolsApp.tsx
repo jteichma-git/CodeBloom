@@ -112,7 +112,7 @@ export function MindToolsApp() {
 
     try {
       await createLog({
-        title: musingTitle.trim() || "Random Musing",
+        title: musingTitle.trim() || "Reflection",
         note: musingNote.trim(),
         rating: musingRating > 0 ? musingRating : undefined,
       });
@@ -121,10 +121,10 @@ export function MindToolsApp() {
       setMusingNote("");
       setMusingRating(0);
       setShowMusingForm(false);
-      alert("Your musing has been logged!");
+      alert("Your reflection has been logged!");
     } catch (error) {
       console.error("Error saving musing:", error);
-      alert("Failed to save musing. Please try again.");
+      alert("Failed to save reflection. Please try again.");
     }
   };
 
@@ -172,7 +172,7 @@ export function MindToolsApp() {
               onClick={() => setShowMusingForm(true)}
             >
               <Plus className="w-4 h-4 mr-2" />
-              Add Musing
+              Add Reflection
             </button>
           </div>
 
@@ -180,7 +180,7 @@ export function MindToolsApp() {
             <div className="card bg-base-100 shadow-xl mb-4">
               <div className="card-body">
                 <div className="flex justify-between items-center mb-3">
-                  <h3 className="card-title text-lg">Add Random Musing</h3>
+                  <h3 className="card-title text-lg">Add Reflection</h3>
                   <button 
                     className="btn btn-ghost btn-xs"
                     onClick={() => {
@@ -197,7 +197,7 @@ export function MindToolsApp() {
                 <input
                   type="text"
                   className="input input-bordered w-full mb-3"
-                  placeholder="Title (optional - defaults to 'Random Musing')"
+                  placeholder="Title (optional - defaults to 'Reflection')"
                   value={musingTitle}
                   onChange={(e) => setMusingTitle(e.target.value)}
                 />
@@ -230,7 +230,7 @@ export function MindToolsApp() {
                   disabled={!musingNote.trim()}
                   onClick={handleSaveMusing}
                 >
-                  Save Musing
+                  Save Reflection
                 </button>
               </div>
             </div>

@@ -22,8 +22,8 @@ export default defineSchema({
   userLogs: defineTable({
     userId: v.id("users"),
     strategyId: v.optional(v.id("strategies")),
-    title: v.optional(v.string()), // For "Random Musing" entries
-    rating: v.optional(v.number()), // Optional for musings
+    title: v.optional(v.string()), // For "Reflection" entries
+    rating: v.optional(v.number()), // Optional for reflections
     note: v.optional(v.string()),
     selectedFilter: v.optional(v.string()),
     filterType: v.optional(v.union(v.literal("category"), v.literal("emotion"))),
