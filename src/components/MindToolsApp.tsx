@@ -50,12 +50,10 @@ export function MindToolsApp() {
   const createLog = useMutation(api.userLogs.createLog);
   
   const [selectedStrategy, setSelectedStrategy] = useState<Strategy | null>(null);
-  const [isFlipped, setIsFlipped] = useState(false);
   const [filterType, setFilterType] = useState<FilterType>("category");
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const [userRating, setUserRating] = useState(0);
   const [userNote, setUserNote] = useState("");
-  const [hasViewedInstructions, setHasViewedInstructions] = useState(false);
   const [currentView, setCurrentView] = useState<"main" | "log">("main");
 
   const categories = ["Focus", "Calm", "Energy", "Mood", "Sleep", "Stress"];
@@ -78,20 +76,10 @@ export function MindToolsApp() {
 
   const handleStrategySelect = (strategy: Strategy) => {
     setSelectedStrategy(strategy);
-    setIsFlipped(true);
-    setHasViewedInstructions(true);
     setUserRating(0);
     setUserNote("");
   };
 
-  const handleViewInstructions = () => {
-    setIsFlipped(true);
-    setHasViewedInstructions(true);
-  };
-
-  const handleBackToOverview = () => {
-    setIsFlipped(false);
-  };
 
   const handleSaveLog = async () => {
     if (!selectedStrategy || userRating === 0) return;
@@ -346,64 +334,26 @@ export function MindToolsApp() {
               ← Back to strategies
             </button>
 
-            <div className="relative h-80">
-              <div className="card bg-base-100 shadow-xl h-full">
-                <div className="card-body h-full flex flex-col">
-                  {!isFlipped ? (
-                    <>
-                      <div className="flex justify-between items-start mb-4">
-                        <h2 className="card-title text-lg">{selectedStrategy.title}</h2>
-                        <div className="flex items-center gap-1">
-                          <div className={`badge ${getResearchBadgeColor(selectedStrategy.researchSupport)} min-w-16 justify-center`}>
-                            {selectedStrategy.researchSupport}
-                          </div>
-                          <span className="text-xs text-gray-500">Credibility</span>
-                        </div>
-                      </div>
-                      <p className="text-gray-600 mb-3 flex-1">{selectedStrategy.description}</p>
-                      <div className="space-y-2 mb-4">
-                        <div className="flex flex-wrap gap-1">
-                          <span className="text-xs font-medium text-gray-500">Categories:</span>
-                          {selectedStrategy.categories.map((cat) => (
-                            <div key={cat} className="badge badge-secondary badge-xs">
-                              {cat}
-                            </div>
-                          ))}
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          <span className="text-xs font-medium text-gray-500">Emotions:</span>
-                          {selectedStrategy.emotions.map((emotion) => (
-                            <div key={emotion} className="badge badge-outline badge-xs">
-                              {emotion}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <button className="btn btn-primary w-full" onClick={handleViewInstructions}>
-                        <RotateCcw className="w-4 h-4 mr-2" />
-                        Try It
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <h3 className="card-title text-lg mb-4">{selectedStrategy.title} - Instructions</h3>
-                      <div className="flex-1 overflow-y-auto">
-                        <p className="text-gray-700 whitespace-pre-line">{selectedStrategy.instructions}</p>
-                      </div>
-                      <button 
-                        className="btn btn-outline w-full mt-4"
-                        onClick={handleBackToOverview}
-                      >
-                        <RotateCcw className="w-4 h-4 mr-2" />
-                        Back to Overview
-                      </button>
-                    </>
-                  )}
+            <div className="card bg-base-100 shadow-xl">
+              <div className="card-body">
+                <div className="flex justify-between items-start mb-4">
+                  <h2 className="card-title text-lg">{selectedStrategy.title}</h2>
+                  <div className="flex items-center gap-1">
+                    <div className={`badge ${getResearchBadgeColor(selectedStrategy.researchSupport)} min-w-16 justify-center`}>
+                      {selectedStrategy.researchSupport}
+                    </div>
+                    <span className="text-xs text-gray-500">Credibility</span>
+                  </div>
+                </div>
+                
+                <div className="bg-base-200 rounded-lg p-4 mb-4">
+                  <h3 className="font-semibold text-sm mb-2">Instructions:</h3>
+                  <p className="text-gray-700 text-sm whitespace-pre-line">{selectedStrategy.instructions}</p>
                 </div>
               </div>
             </div>
 
-            {hasViewedInstructions && (
+            {selectedStrategy && (
               <div className="card bg-base-100 shadow-xl mt-6">
                 <div className="card-body">
                   <h3 className="card-title text-lg mb-3">How did this help?</h3>
