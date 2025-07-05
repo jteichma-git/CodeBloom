@@ -100,6 +100,7 @@ export function MindToolsApp() {
 
       setUserRating(0);
       setUserNote("");
+      setSelectedStrategy(null);
       alert("Your experience has been logged!");
     } catch (error) {
       console.error("Error saving log:", error);
@@ -121,6 +122,7 @@ export function MindToolsApp() {
       setMusingNote("");
       setMusingRating(0);
       setShowMusingForm(false);
+      setCurrentView("main");
       alert("Your reflection has been logged!");
     } catch (error) {
       console.error("Error saving musing:", error);
