@@ -50,6 +50,16 @@ function RootComponent() {
           <div className="min-h-screen flex flex-col">
             <Authenticated>
               <EnsureUser />
+              <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
+                <div className="container mx-auto flex justify-between w-full">
+                  <div className="navbar-start">
+                    <h1 className="font-semibold">MindTools</h1>
+                  </div>
+                  <div className="navbar-end">
+                    <UserButton />
+                  </div>
+                </div>
+              </header>
               <Outlet />
             </Authenticated>
             <Unauthenticated>

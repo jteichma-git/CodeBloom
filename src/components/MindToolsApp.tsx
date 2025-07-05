@@ -150,7 +150,7 @@ export function MindToolsApp() {
 
   if (currentView === "log") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-[calc(100vh-64px)] p-4">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-6">
             <div className="flex items-center justify-center gap-2 mb-2">
@@ -324,7 +324,7 @@ export function MindToolsApp() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-[calc(100vh-64px)] p-4">
       <div className="max-w-md mx-auto">
         <div className="text-center mb-6">
           <div className="flex items-center justify-center gap-2 mb-2">
