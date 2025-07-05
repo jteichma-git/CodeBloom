@@ -10,7 +10,9 @@ import {
   RotateCcw, 
   ArrowLeft, 
   BookOpen, 
-  Calendar 
+  Calendar,
+  Plus,
+  X
 } from "lucide-react";
 import { api } from "../../convex/_generated/api";
 import type { Id } from "../../convex/_generated/dataModel";
@@ -32,8 +34,9 @@ interface Strategy {
 interface UserLog {
   _id: Id<"userLogs">;
   userId: Id<"users">;
-  strategyId: Id<"strategies">;
-  rating: number;
+  strategyId?: Id<"strategies">;
+  title?: string;
+  rating?: number;
   note?: string;
   selectedFilter?: string;
   filterType?: FilterType;
@@ -57,6 +60,10 @@ export function MindToolsApp() {
   const [userRating, setUserRating] = useState(0);
   const [userNote, setUserNote] = useState("");
   const [currentView, setCurrentView] = useState<"main" | "log">("main");
+  const [showMusingForm, setShowMusingForm] = useState(false);
+  const [musingTitle, setMusingTitle] = useState("");
+  const [musingNote, setMusingNote] = useState("");
+  const [musingRating, setMusingRating] = useState(0);
 
   const categories = ["Focus", "Calm", "Energy", "Mood", "Sleep", "Stress"];
   const emotions = ["Tired", "Anxious", "Frazzled", "Sad", "Overwhelmed", "Restless"];
@@ -100,6 +107,27 @@ export function MindToolsApp() {
     }
   };
 
+  const handleSaveMusing = async () => {
+    if (!musingNote.trim()) return;
+
+    try {
+      await createLog({
+        title: musingTitle.trim() || "Random Musing",
+        note: musingNote.trim(),
+        rating: musingRating > 0 ? musingRating : undefined,
+      });
+
+      setMusingTitle("");
+      setMusingNote("");
+      setMusingRating(0);
+      setShowMusingForm(false);
+      alert("Your musing has been logged!");
+    } catch (error) {
+      console.error("Error saving musing:", error);
+      alert("Failed to save musing. Please try again.");
+    }
+  };
+
   const getResearchBadgeColor = (level: string) => {
     switch (level) {
       case "high":
@@ -130,13 +158,83 @@ export function MindToolsApp() {
             <p className="text-gray-600 text-sm">Track your cognitive strategy journey</p>
           </div>
 
-          <button 
-            className="btn btn-ghost btn-sm mb-4"
-            onClick={() => setCurrentView("main")}
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Return to Strategies
-          </button>
+          <div className="flex justify-between items-center mb-4">
+            <button 
+              className="btn btn-ghost btn-sm"
+              onClick={() => setCurrentView("main")}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Return to Strategies
+            </button>
+            
+            <button 
+              className="btn btn-primary btn-sm"
+              onClick={() => setShowMusingForm(true)}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Musing
+            </button>
+          </div>
+
+          {showMusingForm && (
+            <div className="card bg-base-100 shadow-xl mb-4">
+              <div className="card-body">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="card-title text-lg">Add Random Musing</h3>
+                  <button 
+                    className="btn btn-ghost btn-xs"
+                    onClick={() => {
+                      setShowMusingForm(false);
+                      setMusingTitle("");
+                      setMusingNote("");
+                      setMusingRating(0);
+                    }}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <input
+                  type="text"
+                  className="input input-bordered w-full mb-3"
+                  placeholder="Title (optional - defaults to 'Random Musing')"
+                  value={musingTitle}
+                  onChange={(e) => setMusingTitle(e.target.value)}
+                />
+
+                <textarea
+                  className="textarea textarea-bordered w-full mb-3"
+                  placeholder="What's on your mind?"
+                  value={musingNote}
+                  onChange={(e) => setMusingNote(e.target.value)}
+                  rows={3}
+                />
+
+                <div className="mb-3">
+                  <p className="text-sm text-gray-500 mb-2">Mood rating (optional)</p>
+                  <div className="flex gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`w-6 h-6 cursor-pointer ${
+                          star <= musingRating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                        }`}
+                        onClick={() => setMusingRating(star === musingRating ? 0 : star)}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <button 
+                  className="btn btn-primary w-full"
+                  disabled={!musingNote.trim()}
+                  onClick={handleSaveMusing}
+                >
+                  Save Musing
+                </button>
+              </div>
+            </div>
+          )}
 
           {userLogs.length === 0 ? (
             <div className="card bg-base-100 shadow-xl">
@@ -159,7 +257,12 @@ export function MindToolsApp() {
                       <p className="text-sm text-gray-500">Average Rating</p>
                       <div className="flex items-center gap-1">
                         <p className="text-2xl font-bold">
-                          {(userLogs.reduce((sum, log) => sum + log.rating, 0) / userLogs.length).toFixed(1)}
+                          {(() => {
+                            const ratedLogs = userLogs.filter(log => log.rating && log.rating > 0);
+                            return ratedLogs.length > 0 
+                              ? (ratedLogs.reduce((sum, log) => sum + (log.rating || 0), 0) / ratedLogs.length).toFixed(1)
+                              : "—";
+                          })()}
                         </p>
                         <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                       </div>
@@ -175,16 +278,22 @@ export function MindToolsApp() {
                     <div className="card-body p-4">
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="font-semibold text-gray-800">{log.strategyTitle}</h4>
-                        <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                              key={star}
-                              className={`w-4 h-4 ${
-                                star <= log.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                              }`}
-                            />
-                          ))}
-                        </div>
+                        {log.rating && log.rating > 0 ? (
+                          <div className="flex gap-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`w-4 h-4 ${
+                                  star <= log.rating! ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="badge badge-ghost badge-sm">
+                            Reflection
+                          </div>
+                        )}
                       </div>
 
                       {log.note && (
@@ -226,7 +335,12 @@ export function MindToolsApp() {
         {userLogs.length > 0 && !selectedStrategy && (
           <div className="bg-base-100 rounded-lg p-3 mb-4 flex justify-between items-center text-sm">
             <span className="text-gray-600">
-              {userLogs.length} strategies tried • {(userLogs.reduce((sum, log) => sum + log.rating, 0) / userLogs.length).toFixed(1)}★ avg
+              {userLogs.length} entries • {(() => {
+                const ratedLogs = userLogs.filter(log => log.rating && log.rating > 0);
+                return ratedLogs.length > 0 
+                  ? `${(ratedLogs.reduce((sum, log) => sum + (log.rating || 0), 0) / ratedLogs.length).toFixed(1)}★ avg`
+                  : "unrated";
+              })()}
             </span>
             <button 
               className="btn btn-ghost btn-xs"

@@ -26,11 +26,19 @@ export const getUserLogs = query({
     // Get strategy details for each log
     const logsWithStrategies = await Promise.all(
       logs.map(async (log) => {
-        const strategy = await ctx.db.get(log.strategyId);
-        return {
-          ...log,
-          strategyTitle: strategy?.title || "Unknown Strategy",
-        };
+        if (log.strategyId) {
+          const strategy = await ctx.db.get(log.strategyId);
+          return {
+            ...log,
+            strategyTitle: strategy?.title || "Unknown Strategy",
+          };
+        } else {
+          // This is a "Random Musing" entry
+          return {
+            ...log,
+            strategyTitle: log.title || "Random Musing",
+          };
+        }
       })
     );
 
@@ -40,8 +48,9 @@ export const getUserLogs = query({
 
 export const createLog = mutation({
   args: {
-    strategyId: v.id("strategies"),
-    rating: v.number(),
+    strategyId: v.optional(v.id("strategies")),
+    title: v.optional(v.string()), // For "Random Musing" entries
+    rating: v.optional(v.number()),
     note: v.optional(v.string()),
     selectedFilter: v.optional(v.string()),
     filterType: v.optional(v.union(v.literal("category"), v.literal("emotion"))),

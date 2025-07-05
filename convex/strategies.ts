@@ -43,11 +43,15 @@ export const getGlobalRatings = query({
     
     for (const log of allLogs) {
       const strategyId = log.strategyId;
-      if (!ratingsByStrategy[strategyId]) {
-        ratingsByStrategy[strategyId] = { total: 0, count: 0 };
+      const rating = log.rating;
+      // Only include logs with both strategyId and rating
+      if (strategyId && rating) {
+        if (!ratingsByStrategy[strategyId]) {
+          ratingsByStrategy[strategyId] = { total: 0, count: 0 };
+        }
+        ratingsByStrategy[strategyId].total += rating;
+        ratingsByStrategy[strategyId].count += 1;
       }
-      ratingsByStrategy[strategyId].total += log.rating;
-      ratingsByStrategy[strategyId].count += 1;
     }
     
     // Calculate averages
