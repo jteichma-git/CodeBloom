@@ -234,6 +234,7 @@ export function MindToolsApp() {
             onClick={() => {
               setFilterType("category");
               setSelectedFilter("");
+              setSelectedStrategy(null);
             }}
           >
             <Filter className="w-4 h-4 mr-1" />
@@ -244,6 +245,7 @@ export function MindToolsApp() {
             onClick={() => {
               setFilterType("emotion");
               setSelectedFilter("");
+              setSelectedStrategy(null);
             }}
           >
             <Heart className="w-4 h-4 mr-1" />
@@ -256,7 +258,10 @@ export function MindToolsApp() {
             <button
               key={item}
               className={`btn btn-sm ${selectedFilter === item ? "btn-primary" : "btn-outline"}`}
-              onClick={() => setSelectedFilter(selectedFilter === item ? "" : item)}
+              onClick={() => {
+                setSelectedFilter(selectedFilter === item ? "" : item);
+                setSelectedStrategy(null);
+              }}
             >
               {item}
             </button>
