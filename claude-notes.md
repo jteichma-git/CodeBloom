@@ -1,29 +1,34 @@
 # Claude Code Notes
 
-## Current Feature: Devcontainer Setup
+## Current Feature: MindTools Cognitive Strategies App
 
-Setting up devcontainer configuration for the fullstack template with desktop-lite feature for browser access in GitHub Codespaces.
-
-## Progress Status
-- ✅ Created `.devcontainer/devcontainer.json` with Ubuntu base image
-- ✅ Configured Node.js feature with pnpm support
-- ✅ Added desktop-lite feature (browser access on port 6080, VNC on 5901)
-- ✅ Included VS Code extensions from `.vscode/extensions.json`
-- ✅ Set up updateContentCommand with tmux, jq, Claude Code, and Playwright Chrome
-- ✅ Moved work to feature branch for testing
+Implementing a mobile-first cognitive strategies app with research-backed techniques.
 
 ## Commits Made During Session
-- d13bd12: feat: add devcontainer configuration with desktop-lite feature
-- 25f13b3: refactor: use updateContentCommand instead of postCreateCommand
+- Initial setup and requirements gathering
+- Updated project name and removed template instructions
+- Created Convex schema for strategies and user logs
+- Implemented strategy data structure with 12 research-backed strategies
+- Built main UI with strategy cards, filtering, and card flip functionality
+- Added user rating and logging system
 
-## Configuration Details
-- Base: Ubuntu latest with Node.js feature from devcontainers/features
-- Desktop: noVNC web access (port 6080), VNC (port 5901), password: vscode
-- CLI Tools: tmux (for background sessions), jq (JSON parsing)
-- Browser: Chrome installed via Playwright for testing
-- Extensions: All recommendations from existing .vscode/extensions.json
-- Command: Using updateContentCommand (better for templates than postCreateCommand)
+## Implementation Status
+- ✅ Convex backend schema (strategies, userLogs)
+- ✅ 12 research-backed strategies with standardized categories
+- ✅ Main app UI with category/emotion filtering
+- ✅ Strategy card flip functionality
+- ✅ User rating and logging system
+- 🚧 Testing with Playwright (in progress)
+
+## Key Features Implemented
+- 6 categories: Focus, Calm, Energy, Mood, Sleep, Stress
+- 6 emotions: Tired, Anxious, Frazzled, Sad, Overwhelmed, Restless
+- Research support levels: high, medium, low
+- User authentication via Clerk
+- Progress tracking and detailed logs
+- Mobile-first responsive design
 
 ## Next Steps
-- Manual testing needed (requires actual devcontainer environment)
-- Ready for additional commit with updateContentCommand change
+- Test the implementation
+- Seed initial data
+- Launch development server for validation

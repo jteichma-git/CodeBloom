@@ -3,74 +3,47 @@ import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { Authenticated, Unauthenticated } from "convex/react";
-import { Zap } from "lucide-react";
+import { Brain } from "lucide-react";
 import { api } from "../../convex/_generated/api";
+import { MindToolsApp } from "../components/MindToolsApp";
 
-const usersQueryOptions = convexQuery(api.users.listUsers, {});
+const strategiesQueryOptions = convexQuery(api.strategies.list, {});
 
 export const Route = createFileRoute("/")({
   loader: async ({ context: { queryClient } }) =>
-    await queryClient.ensureQueryData(usersQueryOptions),
+    await queryClient.ensureQueryData(strategiesQueryOptions),
   component: HomePage,
 });
 
 function HomePage() {
   return (
-    <div className="text-center">
-      <div className="not-prose flex justify-center mb-4">
-        <Zap className="w-16 h-16 text-primary" />
-      </div>
-      <h1>Fullstack Vibe Coding</h1>
-
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       <Unauthenticated>
-        <p>Sign in to see the list of users.</p>
-        <div className="not-prose mt-4">
-          <SignInButton mode="modal">
-            <button className="btn btn-primary btn-lg">Get Started</button>
-          </SignInButton>
+        <div className="flex flex-col items-center justify-center min-h-screen p-4">
+          <div className="text-center mb-8">
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <Brain className="w-12 h-12 text-indigo-600" />
+              <h1 className="text-4xl font-bold text-gray-800">MindTools</h1>
+            </div>
+            <p className="text-gray-600 text-lg mb-6">
+              Research-backed cognitive strategies for wellbeing
+            </p>
+            <p className="text-gray-500 max-w-md mx-auto">
+              Discover bite-sized strategies to improve your focus, calm, energy, and mood. Sign in to track your progress and personalize your experience.
+            </p>
+          </div>
+          
+          <div className="not-prose">
+            <SignInButton mode="modal">
+              <button className="btn btn-primary btn-lg">Get Started</button>
+            </SignInButton>
+          </div>
         </div>
       </Unauthenticated>
 
       <Authenticated>
-        <UsersList />
+        <MindToolsApp />
       </Authenticated>
     </div>
-  );
-}
-
-function UsersList() {
-  const { data: users } = useSuspenseQuery(usersQueryOptions);
-
-  return (
-    <>
-      <h2>Users</h2>
-
-      {users.length === 0 ? (
-        <div className="not-prose">
-          <div className="p-8 bg-base-200 rounded-lg">
-            <p className="opacity-70">No users yet. You're the first!</p>
-          </div>
-        </div>
-      ) : (
-        <div className="not-prose overflow-x-auto">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Joined</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user._id}>
-                  <td>{user.name}</td>
-                  <td>{new Date(user._creationTime).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </>
   );
 }
