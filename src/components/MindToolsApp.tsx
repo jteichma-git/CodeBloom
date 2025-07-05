@@ -61,6 +61,15 @@ export function MindToolsApp() {
   const categories = ["Focus", "Calm", "Energy", "Mood", "Sleep", "Stress"];
   const emotions = ["Tired", "Anxious", "Frazzled", "Sad", "Overwhelmed", "Restless"];
 
+  // Calculate global average rating for each strategy
+  const getStrategyAverageRating = (strategyId: string) => {
+    const strategyLogs = userLogs.filter(log => log.strategyId === strategyId);
+    if (strategyLogs.length === 0) return null;
+    
+    const totalRating = strategyLogs.reduce((sum, log) => sum + log.rating, 0);
+    return totalRating / strategyLogs.length;
+  };
+
   const filteredStrategies = selectedFilter
     ? strategies.filter((s) =>
         filterType === "category" ? s.categories.includes(selectedFilter) : s.emotions.includes(selectedFilter)
@@ -295,21 +304,32 @@ export function MindToolsApp() {
                   <div className="flex justify-between items-start mb-2">
                     <h3 className="card-title text-sm">{strategy.title}</h3>
                     <div className="flex items-center gap-1">
-                      <div className={`badge ${getResearchBadgeColor(strategy.researchSupport)}`}>
+                      <div className={`badge ${getResearchBadgeColor(strategy.researchSupport)} min-w-16 justify-center`}>
                         {strategy.researchSupport}
                       </div>
                       <span className="text-xs text-gray-500">Credibility</span>
                     </div>
                   </div>
                   <p className="text-gray-600 text-xs mb-2">{strategy.description}</p>
-                  <div className="flex flex-wrap gap-1">
-                    {(filterType === "category" ? strategy.categories : strategy.emotions)
-                      .slice(0, 2)
-                      .map((tag) => (
-                        <div key={tag} className="badge badge-secondary badge-xs">
-                          {tag}
+                  <div className="flex justify-between items-end">
+                    <div className="flex flex-wrap gap-1">
+                      {(filterType === "category" ? strategy.categories : strategy.emotions)
+                        .slice(0, 2)
+                        .map((tag) => (
+                          <div key={tag} className="badge badge-secondary badge-xs">
+                            {tag}
+                          </div>
+                        ))}
+                    </div>
+                    {(() => {
+                      const avgRating = getStrategyAverageRating(strategy._id);
+                      return avgRating ? (
+                        <div className="flex items-center gap-1 text-xs text-gray-500">
+                          <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                          <span>{avgRating.toFixed(1)}</span>
                         </div>
-                      ))}
+                      ) : null;
+                    })()}
                   </div>
                 </div>
               </div>
@@ -334,7 +354,7 @@ export function MindToolsApp() {
                       <div className="flex justify-between items-start mb-4">
                         <h2 className="card-title text-lg">{selectedStrategy.title}</h2>
                         <div className="flex items-center gap-1">
-                          <div className={`badge ${getResearchBadgeColor(selectedStrategy.researchSupport)}`}>
+                          <div className={`badge ${getResearchBadgeColor(selectedStrategy.researchSupport)} min-w-16 justify-center`}>
                             {selectedStrategy.researchSupport}
                           </div>
                           <span className="text-xs text-gray-500">Credibility</span>
