@@ -46,7 +46,7 @@ function RootComponent() {
               <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
                 <div className="container mx-auto flex justify-between w-full">
                   <div className="navbar-start">
-                    <h1 className="font-semibold">MindTools</h1>
+                    <h1 className="font-semibold">Success Strategies</h1>
                   </div>
                   <div className="navbar-end">
                     <UserButton />
@@ -59,7 +59,7 @@ function RootComponent() {
               <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
                 <div className="container mx-auto flex justify-between w-full">
                   <div className="navbar-start">
-                    <h1 className="font-semibold">MindTools</h1>
+                    <h1 className="font-semibold">Success Strategies</h1>
                   </div>
                   <div className="navbar-end">
                     <SignInButton mode="modal">
@@ -79,7 +79,7 @@ function RootComponent() {
                 <Outlet />
               </main>
               <footer className="footer footer-center p-4 text-base-content">
-                <p>© {new Date().getFullYear()} MindTools</p>
+                <p>© {new Date().getFullYear()} Success Strategies</p>
               </footer>
             </Unauthenticated>
           </div>

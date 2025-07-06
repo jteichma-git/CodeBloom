@@ -35,7 +35,7 @@ const strategiesQueryOptions = convexQuery(api.strategies.list, {});
 const userLogsQueryOptions = convexQuery(api.userLogs.getUserLogs, {});
 const globalRatingsQueryOptions = convexQuery(api.strategies.getGlobalRatings, {});
 
-export function MindToolsApp() {
+export function SuccessStrategiesApp() {
   const { data: strategies } = useSuspenseQuery(strategiesQueryOptions);
   const { data: userLogs } = useSuspenseQuery(userLogsQueryOptions);
   const { data: globalRatings } = useSuspenseQuery(globalRatingsQueryOptions);
@@ -316,7 +316,7 @@ export function MindToolsApp() {
         <div className="text-center mb-6">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Brain className="w-8 h-8 text-indigo-600" />
-            <h1 className="text-2xl font-bold text-gray-800">MindTools</h1>
+            <h1 className="text-2xl font-bold text-gray-800">Success Strategies</h1>
           </div>
           <p className="text-gray-600 text-sm">Bite-sized cognitive strategies for wellbeing</p>
         </div>
