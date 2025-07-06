@@ -343,7 +343,7 @@ export function MindToolsApp() {
 
         <div className="flex gap-2 mb-4">
           <button
-            className={`btn flex-1 ${filterType === "category" ? "btn-primary" : "btn-outline"}`}
+            className={`btn flex-1 ${filterType === "category" ? "btn-primary" : "bg-base-200 hover:bg-base-300"}`}
             onClick={() => {
               setFilterType("category");
               setSelectedFilter("");
@@ -354,7 +354,7 @@ export function MindToolsApp() {
             Categories
           </button>
           <button
-            className={`btn flex-1 ${filterType === "emotion" ? "btn-primary" : "btn-outline"}`}
+            className={`btn flex-1 ${filterType === "emotion" ? "btn-primary" : "bg-base-200 hover:bg-base-300"}`}
             onClick={() => {
               setFilterType("emotion");
               setSelectedFilter("");
@@ -370,7 +370,7 @@ export function MindToolsApp() {
           {(filterType === "category" ? categories : emotions).map((item) => (
             <button
               key={item}
-              className={`btn btn-sm ${selectedFilter === item ? "btn-primary" : "btn-outline"}`}
+              className={`btn btn-sm ${selectedFilter === item ? "btn-primary" : "bg-base-200 hover:bg-base-300"}`}
               onClick={() => {
                 setSelectedFilter(selectedFilter === item ? "" : item);
                 setSelectedStrategy(null);
