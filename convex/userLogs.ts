@@ -46,21 +46,6 @@ export const getUserLogs = query({
   },
 });
 
-// Debug query to see all logs in the database
-export const debugAllLogs = query({
-  args: {},
-  handler: async (ctx) => {
-    const allLogs = await ctx.db.query("userLogs").collect();
-    const allUsers = await ctx.db.query("users").collect();
-    
-    return {
-      totalLogs: allLogs.length,
-      logs: allLogs,
-      users: allUsers,
-    };
-  },
-});
-
 export const createLog = mutation({
   args: {
     strategyId: v.optional(v.id("strategies")),
