@@ -14,8 +14,11 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as clearDatabase from "../clearDatabase.js";
+import type * as crons from "../crons.js";
 import type * as migration from "../migration.js";
+import type * as pairing from "../pairing.js";
 import type * as seedStrategies from "../seedStrategies.js";
+import type * as slack from "../slack.js";
 import type * as strategies from "../strategies.js";
 import type * as userLogs from "../userLogs.js";
 import type * as users from "../users.js";
@@ -30,8 +33,11 @@ import type * as users from "../users.js";
  */
 declare const fullApi: ApiFromModules<{
   clearDatabase: typeof clearDatabase;
+  crons: typeof crons;
   migration: typeof migration;
+  pairing: typeof pairing;
   seedStrategies: typeof seedStrategies;
+  slack: typeof slack;
   strategies: typeof strategies;
   userLogs: typeof userLogs;
   users: typeof users;

@@ -28,4 +28,22 @@ export default defineSchema({
     selectedFilter: v.optional(v.string()),
     filterType: v.optional(v.union(v.literal("category"), v.literal("emotion"))),
   }).index("by_userId", ["userId"]),
+  
+  slackUsers: defineTable({
+    slackId: v.string(),
+    name: v.string(),
+    email: v.optional(v.string()),
+    isActive: v.boolean(),
+    lastPairedAt: v.optional(v.number()),
+  }).index("by_slackId", ["slackId"]),
+  
+  pairings: defineTable({
+    user1Id: v.id("slackUsers"),
+    user2Id: v.id("slackUsers"),
+    scheduledAt: v.number(),
+    status: v.union(v.literal("scheduled"), v.literal("sent"), v.literal("completed")),
+    messageTs: v.optional(v.string()),
+  }).index("by_scheduledAt", ["scheduledAt"])
+    .index("by_user1", ["user1Id"])
+    .index("by_user2", ["user2Id"]),
 });

@@ -21,8 +21,9 @@ import {
 } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, MessageSquare } from "lucide-react";
 import { api } from "../../convex/_generated/api";
+import { Link } from "@tanstack/react-router";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -62,7 +63,21 @@ function RootComponent() {
               <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
                 <div className="container mx-auto flex justify-between w-full">
                   <div className="navbar-start">
-                    <h1 className="font-semibold">MindBoost</h1>
+                    <Link to="/" className="font-semibold">MATS Social App</Link>
+                  </div>
+                  <div className="navbar-center">
+                    <nav className="menu menu-horizontal">
+                      <Link 
+                        to="/slack" 
+                        className="btn btn-ghost btn-sm"
+                        activeProps={{
+                          className: "btn-active"
+                        }}
+                      >
+                        <MessageSquare className="w-4 h-4" />
+                        Slack Bot
+                      </Link>
+                    </nav>
                   </div>
                   <div className="navbar-end gap-2">
                     <button 
@@ -86,7 +101,7 @@ function RootComponent() {
               <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
                 <div className="container mx-auto flex justify-between w-full">
                   <div className="navbar-start">
-                    <h1 className="font-semibold">MindBoost</h1>
+                    <h1 className="font-semibold">MATS Social App</h1>
                   </div>
                   <div className="navbar-end gap-2">
                     <button 
@@ -117,7 +132,7 @@ function RootComponent() {
                 <Outlet />
               </main>
               <footer className="footer footer-center p-4 text-base-content">
-                <p>© {new Date().getFullYear()} MindBoost</p>
+                <p>© {new Date().getFullYear()} MATS Social App</p>
               </footer>
             </Unauthenticated>
           </div>
