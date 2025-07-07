@@ -88,7 +88,6 @@ function RootComponent() {
               <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
                 <div className="container mx-auto flex justify-between w-full">
                   <div className="navbar-start">
-                    <Link to="/" className="font-semibold text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Success Strategies</Link>
                   </div>
                   <div className="navbar-center">
                   </div>
@@ -114,7 +113,6 @@ function RootComponent() {
               <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
                 <div className="container mx-auto flex justify-between w-full">
                   <div className="navbar-start">
-                    <h1 className="font-semibold text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Success Strategies</h1>
                   </div>
                   <div className="navbar-end gap-2">
                     <button 
