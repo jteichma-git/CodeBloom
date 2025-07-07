@@ -63,7 +63,7 @@ function RootComponent() {
     setTheme(newTheme);
   };
 
-  // Add a manual reset function for debugging - force deploy
+  // Add a manual reset function for debugging - clean MindBoost deploy
   const resetTheme = () => {
     console.log("Manually resetting theme to light");
     localStorage.removeItem("theme");
