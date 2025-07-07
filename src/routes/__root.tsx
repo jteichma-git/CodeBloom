@@ -21,7 +21,7 @@ import {
 } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
 import { useEffect, useState } from "react";
-import { Moon, Sun, MessageSquare } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { api } from "../../convex/_generated/api";
 import { Link } from "@tanstack/react-router";
 
@@ -88,21 +88,10 @@ function RootComponent() {
               <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
                 <div className="container mx-auto flex justify-between w-full">
                   <div className="navbar-start">
-                    <Link to="/" className="font-semibold">MATS Social App</Link>
+                    <Link to="/" className="font-semibold text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">MindBoost</Link>
                   </div>
                   <div className="navbar-center">
-                    <nav className="menu menu-horizontal">
-                      <Link 
-                        to="/slack" 
-                        className="btn btn-ghost btn-sm"
-                        activeProps={{
-                          className: "btn-active"
-                        }}
-                      >
-                        <MessageSquare className="w-4 h-4" />
-                        Slack Bot
-                      </Link>
-                    </nav>
+                    <span className="text-sm text-base-content/60">Cognitive Strategies for Wellbeing</span>
                   </div>
                   <div className="navbar-end gap-2">
                     <button 
@@ -126,7 +115,7 @@ function RootComponent() {
               <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
                 <div className="container mx-auto flex justify-between w-full">
                   <div className="navbar-start">
-                    <h1 className="font-semibold">MATS Social App</h1>
+                    <h1 className="font-semibold text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">MindBoost</h1>
                   </div>
                   <div className="navbar-end gap-2">
                     <button 
@@ -157,7 +146,7 @@ function RootComponent() {
                 <Outlet />
               </main>
               <footer className="footer footer-center p-4 text-base-content">
-                <p>© {new Date().getFullYear()} MATS Social App</p>
+                <p>© {new Date().getFullYear()} MindBoost</p>
               </footer>
             </Unauthenticated>
           </div>
