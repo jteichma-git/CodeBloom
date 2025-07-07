@@ -38,16 +38,27 @@ function RootComponent() {
     if (typeof window !== "undefined") {
       const savedTheme = localStorage.getItem("theme");
       if (savedTheme === "light" || savedTheme === "forest") {
+        console.log(`Loading saved theme: ${savedTheme}`);
         return savedTheme;
       }
       // Clear invalid theme from localStorage
       localStorage.removeItem("theme");
+      console.log("No valid saved theme, defaulting to light");
     }
     return "light";
   });
 
+  // Ensure theme is applied immediately on mount
+  useEffect(() => {
+    console.log(`Initial theme setup: ${theme}`);
+    document.documentElement.setAttribute("data-theme", theme);
+  }, []);
+
   useEffect(() => {
     console.log(`Setting theme to: ${theme}`);
+    // Force remove any existing theme classes
+    document.documentElement.removeAttribute("data-theme");
+    // Set the new theme
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
@@ -57,6 +68,18 @@ function RootComponent() {
     console.log(`Switching theme from ${theme} to ${newTheme}`);
     setTheme(newTheme);
   };
+
+  // Add a manual reset function for debugging
+  const resetTheme = () => {
+    console.log("Manually resetting theme to light");
+    localStorage.removeItem("theme");
+    setTheme("light");
+  };
+
+  // Expose reset function globally for debugging
+  useEffect(() => {
+    (window as any).resetTheme = resetTheme;
+  }, []);
 
   return (
     <ClerkProvider
