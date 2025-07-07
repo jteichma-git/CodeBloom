@@ -34,12 +34,17 @@ interface Strategy {
 const strategiesQueryOptions = convexQuery(api.strategies.list, {});
 const userLogsQueryOptions = convexQuery(api.userLogs.getUserLogs, {});
 const globalRatingsQueryOptions = convexQuery(api.strategies.getGlobalRatings, {});
+const debugLogsQueryOptions = convexQuery(api.userLogs.debugAllLogs, {});
 
 export function SuccessStrategiesApp() {
   const { data: strategies } = useSuspenseQuery(strategiesQueryOptions);
   const { data: userLogs } = useSuspenseQuery(userLogsQueryOptions);
   const { data: globalRatings } = useSuspenseQuery(globalRatingsQueryOptions);
+  const { data: debugData } = useSuspenseQuery(debugLogsQueryOptions);
   const createLog = useMutation(api.userLogs.createLog);
+  
+  // Temporary debug logging
+  console.log("Debug data:", debugData);
   
   const [selectedStrategy, setSelectedStrategy] = useState<Strategy | null>(null);
   const [filterType, setFilterType] = useState<FilterType>("category");
