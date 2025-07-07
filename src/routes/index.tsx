@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-base-200">
       <Unauthenticated>
         <div className="flex flex-col items-center justify-center min-h-screen p-4">
           <div className="text-center mb-8">

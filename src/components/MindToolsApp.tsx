@@ -137,7 +137,7 @@ export function SuccessStrategiesApp() {
 
   if (currentView === "log") {
     return (
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-[calc(100vh-64px)] p-4">
+      <div className="bg-base-200 min-h-[calc(100vh-64px)] p-4">
         <div className="max-w-md mx-auto">
           <div className="text-center mb-6">
             <div className="flex items-center justify-center gap-2 mb-2">
@@ -217,7 +217,7 @@ export function SuccessStrategiesApp() {
                 <button 
                   className="btn btn-primary w-full"
                   disabled={!musingNote.trim()}
-                  onClick={handleSaveMusing}
+                  onClick={() => void handleSaveMusing()}
                 >
                   Save Reflection
                 </button>
@@ -311,19 +311,19 @@ export function SuccessStrategiesApp() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-[calc(100vh-64px)] p-4">
+    <div className="bg-base-200 min-h-[calc(100vh-64px)] p-4">
       <div className="max-w-md mx-auto">
         <div className="text-center mb-6">
           <div className="flex items-center justify-center gap-2 mb-2">
             <Brain className="w-8 h-8 text-indigo-600" />
-            <h1 className="text-2xl font-bold text-gray-800">Success Strategies</h1>
+            <h1 className="text-2xl font-bold text-base-content">Success Strategies</h1>
           </div>
-          <p className="text-gray-600 text-sm">Bite-sized cognitive strategies for wellbeing</p>
+          <p className="text-base-content/80 text-sm">Bite-sized cognitive strategies for wellbeing</p>
         </div>
 
         {userLogs.length > 0 && !selectedStrategy && (
           <div className="bg-base-100 rounded-lg p-3 mb-4 flex justify-between items-center text-sm">
-            <span className="text-gray-600">
+            <span className="text-base-content/80">
               {userLogs.length} entries • {(() => {
                 const ratedLogs = userLogs.filter(log => log.rating && log.rating > 0);
                 return ratedLogs.length > 0 
@@ -399,7 +399,7 @@ export function SuccessStrategiesApp() {
                       <span className="text-xs text-gray-500">Credibility</span>
                     </div>
                   </div>
-                  <p className="text-gray-600 text-xs mb-2">{strategy.description}</p>
+                  <p className="text-base-content/80 text-sm mb-2">{strategy.description}</p>
                   <div className="flex justify-between items-end">
                     <div className="flex flex-wrap gap-1">
                       {(filterType === "category" ? strategy.categories : strategy.emotions)
@@ -449,7 +449,7 @@ export function SuccessStrategiesApp() {
                 
                 <div className="bg-base-200 rounded-lg p-4 mb-4">
                   <h3 className="font-semibold text-sm mb-2">Instructions:</h3>
-                  <p className="text-gray-700 text-sm whitespace-pre-line">{selectedStrategy.instructions}</p>
+                  <p className="text-base-content/90 text-sm whitespace-pre-line">{selectedStrategy.instructions}</p>
                 </div>
               </div>
             </div>
@@ -482,7 +482,7 @@ export function SuccessStrategiesApp() {
                   <button 
                     className="btn btn-primary w-full"
                     disabled={userRating === 0}
-                    onClick={handleSaveLog}
+                    onClick={() => void handleSaveLog()}
                   >
                     Save to Log
                   </button>
