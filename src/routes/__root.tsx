@@ -48,12 +48,6 @@ function RootComponent() {
     return "light";
   });
 
-  // Ensure theme is applied immediately on mount
-  useEffect(() => {
-    console.log(`Initial theme setup: ${theme}`);
-    document.documentElement.setAttribute("data-theme", theme);
-  }, []);
-
   useEffect(() => {
     console.log(`Setting theme to: ${theme}`);
     // Force remove any existing theme classes
