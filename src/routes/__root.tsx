@@ -20,7 +20,8 @@ import {
   useMutation,
 } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react";
 import { api } from "../../convex/_generated/api";
 
 export const Route = createRootRouteWithContext<{
@@ -32,6 +33,21 @@ export const Route = createRootRouteWithContext<{
 
 function RootComponent() {
   const { queryClient, convexClient: convex } = Route.useRouteContext();
+  const [theme, setTheme] = useState<"light" | "forest">(() => {
+    if (typeof window !== "undefined") {
+      return (localStorage.getItem("theme") as "light" | "forest") || "light";
+    }
+    return "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "forest" : "light");
+  };
 
   return (
     <ClerkProvider
@@ -46,9 +62,20 @@ function RootComponent() {
               <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
                 <div className="container mx-auto flex justify-between w-full">
                   <div className="navbar-start">
-                    <h1 className="font-semibold">Success Strategies</h1>
+                    <h1 className="font-semibold">MindBoost</h1>
                   </div>
-                  <div className="navbar-end">
+                  <div className="navbar-end gap-2">
+                    <button 
+                      onClick={toggleTheme}
+                      className="btn btn-ghost btn-sm btn-square"
+                      aria-label="Toggle theme"
+                    >
+                      {theme === "light" ? (
+                        <Moon className="w-4 h-4" />
+                      ) : (
+                        <Sun className="w-4 h-4" />
+                      )}
+                    </button>
                     <UserButton />
                   </div>
                 </div>
@@ -59,16 +86,27 @@ function RootComponent() {
               <header className="navbar bg-base-100 shadow-sm border-b border-base-300">
                 <div className="container mx-auto flex justify-between w-full">
                   <div className="navbar-start">
-                    <h1 className="font-semibold">Success Strategies</h1>
+                    <h1 className="font-semibold">MindBoost</h1>
                   </div>
-                  <div className="navbar-end">
+                  <div className="navbar-end gap-2">
+                    <button 
+                      onClick={toggleTheme}
+                      className="btn btn-ghost btn-sm btn-square"
+                      aria-label="Toggle theme"
+                    >
+                      {theme === "light" ? (
+                        <Moon className="w-4 h-4" />
+                      ) : (
+                        <Sun className="w-4 h-4" />
+                      )}
+                    </button>
                     <SignInButton mode="modal">
                       <button className="btn btn-primary btn-sm">
                         Sign in
                       </button>
                     </SignInButton>
                     <SignUpButton mode="modal">
-                      <button className="btn btn-ghost btn-sm ml-2">
+                      <button className="btn btn-ghost btn-sm">
                         Sign up
                       </button>
                     </SignUpButton>
@@ -79,7 +117,7 @@ function RootComponent() {
                 <Outlet />
               </main>
               <footer className="footer footer-center p-4 text-base-content">
-                <p>© {new Date().getFullYear()} Success Strategies</p>
+                <p>© {new Date().getFullYear()} MindBoost</p>
               </footer>
             </Unauthenticated>
           </div>
