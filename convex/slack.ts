@@ -112,9 +112,10 @@ export const upsertSlackUser = internalMutation({
 export const sendDirectMessage = internalAction({
   args: {
     userId: v.string(),
-    message: v.string(),
+    message: v.optional(v.string()),
+    blocks: v.optional(v.string()),
   },
-  handler: async (ctx, { userId, message }) => {
+  handler: async (ctx, { userId, message, blocks }) => {
     const token = process.env.SLACK_BOT_TOKEN;
     if (!token) {
       throw new Error("SLACK_BOT_TOKEN not configured");
@@ -139,16 +140,25 @@ export const sendDirectMessage = internalAction({
       }
 
       // Send message
+      const messageBody: any = {
+        channel: dmData.channel.id,
+      };
+
+      if (message) {
+        messageBody.text = message;
+      }
+
+      if (blocks) {
+        messageBody.blocks = JSON.parse(blocks);
+      }
+
       const messageResponse = await fetch("https://slack.com/api/chat.postMessage", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          channel: dmData.channel.id,
-          text: message,
-        }),
+        body: JSON.stringify(messageBody),
       });
 
       const messageData = await messageResponse.json();

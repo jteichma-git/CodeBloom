@@ -35,6 +35,9 @@ export default defineSchema({
     email: v.optional(v.string()),
     isActive: v.boolean(),
     lastPairedAt: v.optional(v.number()),
+    isOptedOut: v.optional(v.boolean()),
+    snoozeUntil: v.optional(v.number()),
+    snoozeReason: v.optional(v.string()),
   }).index("by_slackId", ["slackId"]),
   
   pairings: defineTable({
@@ -46,4 +49,10 @@ export default defineSchema({
   }).index("by_scheduledAt", ["scheduledAt"])
     .index("by_user1", ["user1Id"])
     .index("by_user2", ["user2Id"]),
+  
+  botConfig: defineTable({
+    key: v.string(),
+    value: v.union(v.string(), v.number(), v.boolean()),
+    description: v.optional(v.string()),
+  }).index("by_key", ["key"]),
 });

@@ -7,8 +7,8 @@ export const createRandomPairings = action({
     excludeRecentDays: v.optional(v.number()),
   },
   handler: async (ctx, { excludeRecentDays = 14 }) => {
-    // Get all active users
-    const users = await ctx.runQuery(api.slack.getActiveSlackUsers);
+    // Get all available users (active, not opted out, not snoozed)
+    const users = await ctx.runQuery(api.config.getAvailableUsers);
     
     if (users.length < 2) {
       throw new ConvexError("Need at least 2 active users to create pairings");
@@ -136,19 +136,23 @@ export const sendPairingMessages = action({
           continue;
         }
 
-        // Create personalized messages
+        // Create personalized messages with opt-out options
         const message1 = createPairingMessage(user1.name, user2.name);
         const message2 = createPairingMessage(user2.name, user1.name);
+        const blocks1 = createPairingBlocks(user1.name, user2.name);
+        const blocks2 = createPairingBlocks(user2.name, user1.name);
 
         // Send messages
         const result1 = await ctx.runAction(internal.slack.sendDirectMessage, {
           userId: user1.slackId,
           message: message1,
+          blocks: blocks1,
         });
 
         const result2 = await ctx.runAction(internal.slack.sendDirectMessage, {
           userId: user2.slackId,
           message: message2,
+          blocks: blocks2,
         });
 
         // Update pairing status
@@ -200,6 +204,59 @@ function createPairingMessage(userName: string, partnerName: string): string {
   return messages[Math.floor(Math.random() * messages.length)];
 }
 
+function createPairingBlocks(userName: string, partnerName: string): string {
+  const blocks = [
+    {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: `Hi ${userName}! 👋 You've been paired with *${partnerName}* for a coffee chat this week.`
+      }
+    },
+    {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: "Reach out to them to schedule a 15-30 minute conversation. Get to know each other and share what you're working on!"
+      }
+    },
+    {
+      type: "divider"
+    },
+    {
+      type: "section",
+      text: {
+        type: "mrkdwn",
+        text: "_Not available this week? You can manage your coffee chat preferences:_"
+      }
+    },
+    {
+      type: "actions",
+      elements: [
+        {
+          type: "button",
+          text: { type: "plain_text", text: "Snooze 1 Week" },
+          action_id: "snooze_1week",
+          style: "primary"
+        },
+        {
+          type: "button",
+          text: { type: "plain_text", text: "Snooze 1 Month" },
+          action_id: "snooze_1month"
+        },
+        {
+          type: "button",
+          text: { type: "plain_text", text: "Opt Out" },
+          action_id: "opt_out",
+          style: "danger"
+        }
+      ]
+    }
+  ];
+
+  return JSON.stringify(blocks);
+}
+
 export const getPairing = query({
   args: { id: v.id("pairings") },
   handler: async (ctx, { id }) => {
@@ -249,15 +306,55 @@ export const updateLastPaired = mutation({
   },
 });
 
-export const runWeeklyPairing = internalAction({
-  args: {},
-  handler: async (ctx) => {
-    console.log("Starting weekly coffee chat pairings...");
+export const runScheduledPairing = internalAction({
+  args: {
+    interval: v.string(),
+  },
+  handler: async (ctx, { interval }) => {
+    console.log(`Starting ${interval} coffee chat pairings...`);
     
     try {
+      // Check if this interval is currently configured
+      const configuredInterval = await ctx.runQuery(api.config.getBotConfig, {
+        key: "pairingInterval",
+        defaultValue: "weekly",
+      });
+
+      if (configuredInterval !== interval) {
+        console.log(`Skipping ${interval} pairing - configured for ${configuredInterval}`);
+        return { skipped: true, reason: `Configured for ${configuredInterval}` };
+      }
+
+      // Handle bi-weekly logic - only run every other week
+      if (interval === "biweekly") {
+        const lastBiweeklyRun = await ctx.runQuery(api.config.getBotConfig, {
+          key: "lastBiweeklyRun",
+          defaultValue: 0,
+        });
+        
+        const twoWeeksAgo = Date.now() - (14 * 24 * 60 * 60 * 1000);
+        if (lastBiweeklyRun > twoWeeksAgo) {
+          console.log("Skipping bi-weekly pairing - too recent");
+          return { skipped: true, reason: "Too recent for bi-weekly" };
+        }
+
+        // Update last run time
+        await ctx.runMutation(api.config.setBotConfig, {
+          key: "lastBiweeklyRun",
+          value: Date.now(),
+          description: "Last time bi-weekly pairing ran",
+        });
+      }
+
+      // Get configured exclude days
+      const excludeRecentDays = await ctx.runQuery(api.config.getBotConfig, {
+        key: "excludeRecentDays",
+        defaultValue: 14,
+      }) as number;
+
       // Create random pairings
       const pairingResult = await ctx.runAction(internal.pairing.createRandomPairings, {
-        excludeRecentDays: 14, // Don't pair people who were paired in last 2 weeks
+        excludeRecentDays,
       });
       
       console.log(`Created ${pairingResult.pairCount} pairings, ${pairingResult.unpairedCount} unpaired`);
@@ -273,13 +370,14 @@ export const runWeeklyPairing = internalAction({
       console.log(`Sent ${successCount} pairing messages, ${failureCount} failures`);
       
       return {
+        interval,
         pairingCount: pairingResult.pairCount,
         unpairedCount: pairingResult.unpairedCount,
         messagesSuccess: successCount,
         messagesFailure: failureCount,
       };
     } catch (error) {
-      console.error("Weekly pairing failed:", error);
+      console.error(`${interval} pairing failed:`, error);
       throw error;
     }
   },
