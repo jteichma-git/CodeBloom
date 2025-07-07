@@ -321,15 +321,21 @@ export function SuccessStrategiesApp() {
           <p className="text-base-content/80 text-sm">Bite-sized cognitive strategies for wellbeing</p>
         </div>
 
-        {userLogs.length > 0 && !selectedStrategy && (
+        {!selectedStrategy && (
           <div className="bg-base-100 rounded-lg p-3 mb-4 flex justify-between items-center text-sm">
             <span className="text-base-content/80">
-              {userLogs.length} entries • {(() => {
-                const ratedLogs = userLogs.filter(log => log.rating && log.rating > 0);
-                return ratedLogs.length > 0 
-                  ? `${(ratedLogs.reduce((sum, log) => sum + (log.rating || 0), 0) / ratedLogs.length).toFixed(1)}★ avg`
-                  : "unrated";
-              })()}
+              {userLogs.length > 0 ? (
+                <>
+                  {userLogs.length} entries • {(() => {
+                    const ratedLogs = userLogs.filter(log => log.rating && log.rating > 0);
+                    return ratedLogs.length > 0 
+                      ? `${(ratedLogs.reduce((sum, log) => sum + (log.rating || 0), 0) / ratedLogs.length).toFixed(1)}★ avg`
+                      : "unrated";
+                  })()}
+                </>
+              ) : (
+                "No entries yet • Start your journey"
+              )}
             </span>
             <button 
               className="btn btn-ghost btn-xs"
