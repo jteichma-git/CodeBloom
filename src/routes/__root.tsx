@@ -63,7 +63,7 @@ function RootComponent() {
     setTheme(newTheme);
   };
 
-  // Add a manual reset function for debugging
+  // Add a manual reset function for debugging - force deploy
   const resetTheme = () => {
     console.log("Manually resetting theme to light");
     localStorage.removeItem("theme");
