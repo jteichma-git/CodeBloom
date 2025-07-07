@@ -4,7 +4,18 @@ import { v } from "convex/values";
 export const list = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("strategies").filter(q => q.eq(q.field("isActive"), true)).collect();
+    const strategies = await ctx.db.query("strategies").collect();
+    
+    // Normalize the data to handle both old and new schema formats
+    return strategies
+      .filter(s => s.isActive !== false) // Include strategies where isActive is true or undefined
+      .map(strategy => ({
+        ...strategy,
+        // Use new field names, falling back to old ones if needed
+        emotionCategories: strategy.emotionCategories || strategy.emotions || [],
+        strategyCategories: strategy.strategyCategories || strategy.categories || [],
+        estimatedMinutes: strategy.estimatedMinutes || 5, // Default fallback
+      }));
   },
 });
 

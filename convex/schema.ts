@@ -14,9 +14,13 @@ export default defineSchema({
     description: v.string(),
     instructions: v.string(),
     researchSupport: v.union(v.literal("low"), v.literal("medium"), v.literal("high")),
-    emotionCategories: v.array(v.string()),
-    strategyCategories: v.array(v.string()),
-    estimatedMinutes: v.number(),
+    // Support both old and new field names during migration
+    categories: v.optional(v.array(v.string())), // Old field
+    emotions: v.optional(v.array(v.string())), // Old field
+    emotionCategories: v.optional(v.array(v.string())), // New field
+    strategyCategories: v.optional(v.array(v.string())), // New field
+    estimatedMinutes: v.optional(v.number()),
+    isActive: v.optional(v.boolean()), // From old schema
   }),
 
   userRatings: defineTable({
