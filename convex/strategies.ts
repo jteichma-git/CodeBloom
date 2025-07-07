@@ -54,7 +54,8 @@ export const getGlobalRatings = query({
     
     for (const log of allLogs) {
       const strategyId = log.strategyId;
-      const rating = log.rating;
+      // Handle both old and new field names for ratings
+      const rating = log.effectivenessRating || log.rating;
       // Only include logs with both strategyId and rating
       if (strategyId && rating) {
         if (!ratingsByStrategy[strategyId]) {

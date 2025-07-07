@@ -37,11 +37,16 @@ export default defineSchema({
   userLogs: defineTable({
     userId: v.string(),
     strategyId: v.id("strategies"),
-    completedAt: v.number(),
-    effectivenessRating: v.number(), // 1-5 scale
+    // Migration compatibility fields
+    completedAt: v.optional(v.number()), // Made optional for migration
+    effectivenessRating: v.optional(v.number()), // 1-5 scale, optional for migration
+    rating: v.optional(v.number()), // Old field name, optional
     notes: v.optional(v.string()),
-    context: v.string(), // what they were addressing
+    note: v.optional(v.string()), // Old field name, optional
+    context: v.optional(v.string()), // what they were addressing, optional for migration
+    // Old fields from previous schema
+    filterType: v.optional(v.string()),
+    selectedFilter: v.optional(v.string()),
   })
-    .index("by_userId", ["userId"])
-    .index("by_userId_completedAt", ["userId", "completedAt"]),
+    .index("by_userId", ["userId"]),
 });
