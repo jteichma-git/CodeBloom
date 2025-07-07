@@ -7,7 +7,7 @@ const crons = cronJobs();
 crons.weekly(
   "weekly coffee pairings",
   { dayOfWeek: "monday", hourUTC: 9, minuteUTC: 0 },
-  internal.pairing.runScheduledPairing,
+  internal.pairing.runScheduledPairing as any,
   { interval: "weekly" }
 );
 
@@ -15,7 +15,7 @@ crons.weekly(
 crons.weekly(
   "biweekly coffee pairings",
   { dayOfWeek: "monday", hourUTC: 9, minuteUTC: 0 },
-  internal.pairing.runScheduledPairing,
+  internal.pairing.runScheduledPairing as any,
   { interval: "biweekly" }
 );
 
@@ -23,7 +23,7 @@ crons.weekly(
 crons.monthly(
   "monthly coffee pairings",
   { day: 1, hourUTC: 9, minuteUTC: 0 },
-  internal.pairing.runScheduledPairing,
+  internal.pairing.runScheduledPairing as any,
   { interval: "monthly" }
 );
 

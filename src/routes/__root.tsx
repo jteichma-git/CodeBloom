@@ -36,18 +36,26 @@ function RootComponent() {
   const { queryClient, convexClient: convex } = Route.useRouteContext();
   const [theme, setTheme] = useState<"light" | "forest">(() => {
     if (typeof window !== "undefined") {
-      return (localStorage.getItem("theme") as "light" | "forest") || "light";
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "light" || savedTheme === "forest") {
+        return savedTheme;
+      }
+      // Clear invalid theme from localStorage
+      localStorage.removeItem("theme");
     }
     return "light";
   });
 
   useEffect(() => {
+    console.log(`Setting theme to: ${theme}`);
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(theme === "light" ? "forest" : "light");
+    const newTheme = theme === "light" ? "forest" : "light";
+    console.log(`Switching theme from ${theme} to ${newTheme}`);
+    setTheme(newTheme);
   };
 
   return (

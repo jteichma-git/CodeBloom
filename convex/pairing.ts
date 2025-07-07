@@ -22,7 +22,7 @@ export const createRandomPairings = action({
         daysBack: excludeRecentDays,
       });
       userPairings.set(user._id, new Set(
-        history.map(p => p.user1Id === user._id ? p.user2Id : p.user1Id)
+        history.map((p: any) => p.user1Id === user._id ? p.user2Id : p.user1Id)
       ));
     }
 
@@ -77,7 +77,7 @@ export const createRandomPairings = action({
     const pairingIds = [];
 
     for (const { user1, user2 } of pairs) {
-      const pairingId = await ctx.runMutation(internal.pairing.createPairingMutation, {
+      const pairingId: any = await ctx.runMutation(internal.pairing.createPairingMutation, {
         user1Id: user1._id,
         user2Id: user2._id,
         scheduledAt,
@@ -143,13 +143,13 @@ export const sendPairingMessages = action({
         const blocks2 = createPairingBlocks(user2.name, user1.name);
 
         // Send messages
-        const result1 = await ctx.runAction(internal.slack.sendDirectMessage, {
+        const result1 = await ctx.runAction(internal.slackActions.sendDirectMessage, {
           userId: user1.slackId,
           message: message1,
           blocks: blocks1,
         });
 
-        const result2 = await ctx.runAction(internal.slack.sendDirectMessage, {
+        const result2 = await ctx.runAction(internal.slackActions.sendDirectMessage, {
           userId: user2.slackId,
           message: message2,
           blocks: blocks2,
@@ -183,7 +183,7 @@ export const sendPairingMessages = action({
         results.push({
           pairingId: pairing._id,
           success: false,
-          error: error.message,
+          error: (error as Error).message,
         });
       }
     }
@@ -364,8 +364,8 @@ export const runScheduledPairing = internalAction({
         pairingIds: pairingResult.pairingIds,
       });
       
-      const successCount = messageResults.filter(r => r.success).length;
-      const failureCount = messageResults.filter(r => !r.success).length;
+      const successCount = messageResults.filter((r: any) => r.success).length;
+      const failureCount = messageResults.filter((r: any) => !r.success).length;
       
       console.log(`Sent ${successCount} pairing messages, ${failureCount} failures`);
       

@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { convexQuery } from '@convex-dev/react-query'
-import { api } from '@/convex/_generated/api'
-import { useConvexAction, useConvexMutation } from 'convex/react'
+import { api } from '../../convex/_generated/api'
+import { useMutation, useAction } from 'convex/react'
 import { useState } from 'react'
 
 export const Route = createFileRoute('/slack')({
@@ -28,11 +28,11 @@ function SlackManagement() {
     convexQuery(api.config.getAllBotConfig, {})
   )
 
-  const syncUsers = useConvexAction(api.slack.syncSlackUsers)
-  const createPairings = useConvexAction(api.pairing.createRandomPairings)
-  const sendMessages = useConvexAction(api.pairing.sendPairingMessages)
-  const setBotConfig = useConvexMutation(api.config.setBotConfig)
-  const updateUserPrefs = useConvexMutation(api.config.updateUserPreferences)
+  const syncUsers = useAction(api.slackActions.syncSlackUsers)
+  const createPairings = useAction(api.pairing.createRandomPairings)
+  const sendMessages = useAction(api.pairing.sendPairingMessages)
+  const setBotConfig = useMutation(api.config.setBotConfig)
+  const updateUserPrefs = useMutation(api.config.updateUserPreferences)
 
   const handleSyncUsers = async () => {
     setIsLoading(true)

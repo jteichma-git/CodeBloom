@@ -224,7 +224,7 @@ export const sendOptOutMessage = internalAction({
       }
     ];
 
-    return await ctx.runAction(internal.slack.sendDirectMessage, {
+    return await ctx.runAction(internal.slackActions.sendDirectMessage, {
       userId,
       blocks: JSON.stringify(blocks),
     });

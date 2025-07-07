@@ -20,6 +20,7 @@ import type * as migration from "../migration.js";
 import type * as pairing from "../pairing.js";
 import type * as seedStrategies from "../seedStrategies.js";
 import type * as slack from "../slack.js";
+import type * as slackActions from "../slackActions.js";
 import type * as strategies from "../strategies.js";
 import type * as userLogs from "../userLogs.js";
 import type * as userPrefs from "../userPrefs.js";
@@ -41,6 +42,7 @@ declare const fullApi: ApiFromModules<{
   pairing: typeof pairing;
   seedStrategies: typeof seedStrategies;
   slack: typeof slack;
+  slackActions: typeof slackActions;
   strategies: typeof strategies;
   userLogs: typeof userLogs;
   userPrefs: typeof userPrefs;
